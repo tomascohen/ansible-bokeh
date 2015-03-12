@@ -1,0 +1,13 @@
+####################################################
+# EDIT THIS FILE to set your own configuration for #
+# the Bokeh deployment                             #
+####################################################
+
+## bokeh specific options
+#bokeh_domain: bokeh
+#bokeh_version: 7.1.16
+#bokeh_database_host: localhost
+#bokeh_database_name: bokeh
+#bokeh_database_user: bokeh_user
+#bokeh_database_pass: bokeh_password
+

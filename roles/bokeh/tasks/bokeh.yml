@@ -1,0 +1,20 @@
+---
+- name: Install dependencies
+  apt: pkg={{ item }} state=present
+  with_items:
+      - php5
+      - php5-gd
+      - php5-imagick
+      - php5-xdebug
+      - php-pear
+      - php5-mysql
+      - php5-xhprof
+      - graphviz
+      - apache2
+      - libapache2-mod-php5
+      - subversion
+      - php5-mcrypt
+      - phpunit
+
+- name: Download Bokeh source code
+  git: repo=http://git.afi-sa.fr/afi/opacce.git dest=/srv/bokeh_src version={{ bokeh_version }}
