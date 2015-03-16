@@ -1,3 +1,2 @@
 ---
 - include: bokeh.yml
-- include: apache.yml

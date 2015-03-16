@@ -1,20 +1,95 @@
 ---
+
+- name: Install unattended upgrades (Debian/Ubuntu only)
+  apt: pkg=unattended-upgrades state=installed
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
 - name: Install dependencies
   apt: pkg={{ item }} state=present
   with_items:
       - php5
+      - php-calendar
+      - php-gettext
+      - php-pear
+      - php-soap
+      - php5-curl
       - php5-gd
       - php5-imagick
-      - php5-xdebug
-      - php-pear
+      - php5-mcrypt
       - php5-mysql
+      - php5-xdebug
       - php5-xhprof
+      - git
       - graphviz
       - apache2
       - libapache2-mod-php5
-      - subversion
-      - php5-mcrypt
-      - phpunit
 
+## Install Bokeh
 - name: Download Bokeh source code
-  git: repo=http://git.afi-sa.fr/afi/opacce.git dest=/srv/bokeh_src version={{ bokeh_version }}
+  git: repo=http://git.afi-sa.fr/afi/opacce.git dest={{ bokeh_path }} version={{ bokeh_version }}
+
+- name: Copy the local.php template
+  template: src=local.php dest={{ bokeh_path }}/local.php
+
+- name: Copy the config.ini template
+  template: src=bokeh_config.ini dest={{ bokeh_path }}/config.ini
+
+- name: Amend config.ini template (timezone)
+  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_TIMEZONE__' replace={{ bokeh_timezone }} backup=no
+
+- name: Amend config.ini template (timezone)
+  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_LANGUAGE__' replace={{ bokeh_language }} backup=no
+
+- name: Amend config.ini template (timezone)
+  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_DB_USER__' replace={{ bokeh_db_user }} backup=no
+
+- name: Amend config.ini template (timezone)
+  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_DB_PASS__' replace={{ bokeh_db_pass }} backup=no
+
+- name: Amend config.ini template (timezone)
+  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_DB_NAME__' replace={{ bokeh_db_name }} backup=no
+
+## Apache specifics
+- name: Enable Apache modules
+  apache2_module: state=present name={{ item }}
+  with_items:
+    - headers
+    - rewrite
+    - php5
+
+- name: Copy the virtualhost template
+  template: src=apache_bokeh.conf dest=/etc/apache2/sites-available/{{ bokeh_apache_file }}
+
+- name: Amend the virtualhost template (path)
+  replace: dest=/etc/apache2/sites-available/{{ bokeh_apache_file }} regexp='__BOKEH_PATH__' replace={{ bokeh_path }} backup=no
+
+- name: Amend the virtualhost template (domain)
+  replace: dest=/etc/apache2/sites-available/{{ bokeh_apache_file }} regexp='__BOKEH_DOMAIN__' replace={{ bokeh_domain }} backup=no
+
+- name: Amend the virtualhost template (admin email)
+  replace: dest=/etc/apache2/sites-available/{{ bokeh_apache_file }} regexp='__BOKEH_ADMIN_EMAIL__' replace={{ bokeh_admin_email }} backup=no
+
+- name: Enable the Bokeh site
+  command: a2ensite {{ bokeh_apache_file }} creates=/etc/apache2/sites-enabled/{{ bokeh_apache_file }}
+  notify: reload apache
+
+ ## PHP specifics
+- name: Configure PHP post_max_size
+  replace: dest={{ php_ini }} regexp='^post_max_size = .*$' replace='post_max_size = {{ php_post_max_size }}' backup=yes
+  notify:
+  - reload apache2
+
+- name: Configure PHP upload_max_filesize
+  replace: dest={{ php_ini }} regexp='^upload_max_filesize = .*$' replace='upload_max_filesize = {{ php_upload_max_filesize }}' backup=yes
+  notify:
+  - reload apache2
+
+- name: Configure PHP error_reporting
+  replace: dest={{ php_ini }} regexp='^error_reporting = .*$' replace='error_reporting = {{ php_error_reporting }}' backup=yes
+  notify:
+  - reload apache2
+
+## Temp folder permissions
+- name: Set temp folder permissions
+  file: state=directory path={{ bokeh_path }}/temp group=www-data mode=775
+

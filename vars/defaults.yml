@@ -4,4 +4,19 @@
 
 # bokeh specific options
 bokeh_domain: bokeh
+bokeh_path: /srv/bokeh
+bokeh_apache_file: bokeh.conf
+bokeh_admin_email: admin@example.com
 bokeh_version: 7.1.16
+bokeh_db_hostname: localhost
+bokeh_db_name: bokeh
+bokeh_db_user: bokehusr
+bokeh_db_pass: bokehpass
+bokeh_timezone: Europe/Paris
+bokeh_language: fr_FR
+
+# apache specific options
+php_ini: /etc/php5/apache2/php.ini
+php_post_max_size: 30M
+php_upload_max_filesize: 30M
+php_error_reporting: E_ALL & ~E_NOTICE & ~E_DEPRECATED
