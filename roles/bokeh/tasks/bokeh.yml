@@ -72,23 +72,24 @@
 
 - name: Enable the Bokeh site
   command: a2ensite {{ bokeh_apache_file }} creates=/etc/apache2/sites-enabled/{{ bokeh_apache_file }}
-  notify: reload apache
+  notify:
+   - reload apache
 
  ## PHP specifics
 - name: Configure PHP post_max_size
   replace: dest={{ php_ini }} regexp='^post_max_size = .*$' replace='post_max_size = {{ php_post_max_size }}' backup=yes
   notify:
-  - reload apache2
+  - reload apache
 
 - name: Configure PHP upload_max_filesize
   replace: dest={{ php_ini }} regexp='^upload_max_filesize = .*$' replace='upload_max_filesize = {{ php_upload_max_filesize }}' backup=yes
   notify:
-  - reload apache2
+  - reload apache
 
 - name: Configure PHP error_reporting
   replace: dest={{ php_ini }} regexp='^error_reporting = .*$' replace='error_reporting = {{ php_error_reporting }}' backup=yes
   notify:
-  - reload apache2
+  - reload apache
 
 ## Temp folder permissions
 - name: Set temp folder permissions
