@@ -1,7 +1,6 @@
 ---
-
-- name: Install unattended upgrades (Debian/Ubuntu only)
-  apt: pkg=unattended-upgrades state=installed
+- name: Update 'apt' cache and install unattended upgrades
+  apt: pkg=unattended-upgrades state=installed update_cache=yes
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Install dependencies
@@ -48,6 +47,8 @@
 
 - name: Amend config.ini template (timezone)
   replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_DB_NAME__' replace={{ bokeh_db_name }} backup=no
+
+## TODO Configure Cosmogramme
 
 ## Apache specifics
 - name: Enable Apache modules
