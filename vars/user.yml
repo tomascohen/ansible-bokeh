@@ -10,6 +10,7 @@
 # bokeh_admin_email: admin@example.com
 # bokeh_version: 7.1.16
 # bokeh_db_hostname: localhost
+# bokeh_db_port: 3306
 # bokeh_db_name: bokeh
 # bokeh_db_user: bokehusr
 # bokeh_db_pass: bokehpass
