@@ -33,21 +33,6 @@
 - name: Copy the config.ini template
   template: src=bokeh_config.ini dest={{ bokeh_path }}/config.ini
 
-- name: Amend config.ini template (timezone)
-  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_TIMEZONE__' replace={{ bokeh_timezone }} backup=no
-
-- name: Amend config.ini template (timezone)
-  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_LANGUAGE__' replace={{ bokeh_language }} backup=no
-
-- name: Amend config.ini template (timezone)
-  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_DB_USER__' replace={{ bokeh_db_user }} backup=no
-
-- name: Amend config.ini template (timezone)
-  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_DB_PASS__' replace={{ bokeh_db_pass }} backup=no
-
-- name: Amend config.ini template (timezone)
-  replace: dest={{ bokeh_path }}/config.ini regexp='__BOKEH_DB_NAME__' replace={{ bokeh_db_name }} backup=no
-
 ## TODO Configure Cosmogramme
 
 ## Apache specifics
@@ -60,15 +45,6 @@
 
 - name: Copy the virtualhost template
   template: src=apache_bokeh.conf dest=/etc/apache2/sites-available/{{ bokeh_apache_file }}
-
-- name: Amend the virtualhost template (path)
-  replace: dest=/etc/apache2/sites-available/{{ bokeh_apache_file }} regexp='__BOKEH_PATH__' replace={{ bokeh_path }} backup=no
-
-- name: Amend the virtualhost template (domain)
-  replace: dest=/etc/apache2/sites-available/{{ bokeh_apache_file }} regexp='__BOKEH_DOMAIN__' replace={{ bokeh_domain }} backup=no
-
-- name: Amend the virtualhost template (admin email)
-  replace: dest=/etc/apache2/sites-available/{{ bokeh_apache_file }} regexp='__BOKEH_ADMIN_EMAIL__' replace={{ bokeh_admin_email }} backup=no
 
 - name: Enable the Bokeh site
   command: a2ensite {{ bokeh_apache_file }} creates=/etc/apache2/sites-enabled/{{ bokeh_apache_file }}
