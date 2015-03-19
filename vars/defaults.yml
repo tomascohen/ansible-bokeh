@@ -15,6 +15,7 @@ bokeh_db_user: bokehusr
 bokeh_db_pass: bokehpass
 bokeh_timezone: Europe/Paris
 bokeh_language: fr_FR
+cosmogramme_super_admin_pass: opac3
 
 # apache specific options
 php_ini: /etc/php5/apache2/php.ini

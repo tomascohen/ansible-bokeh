@@ -33,7 +33,8 @@
 - name: Copy the config.ini template
   template: src=bokeh_config.ini dest={{ bokeh_path }}/config.ini
 
-## TODO Configure Cosmogramme
+- name: Set Cosmogramme
+  template: src=cosmogramme_config.php dest={{ bokeh_path }}/cosmogramme/config.php
 
 ## Apache specifics
 - name: Enable Apache modules
