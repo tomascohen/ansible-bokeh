@@ -50,6 +50,10 @@
 
 ## TODO Configure Cosmogramme
 
+# Recursively set directory permissions
+- name: Change Bokeh files ownership
+  file: path={{ bokeh_path }} recurse=yes owner=www-data group=www-data
+
 ## Apache specifics
 - name: Enable Apache modules
   apache2_module: state=present name={{ item }}
