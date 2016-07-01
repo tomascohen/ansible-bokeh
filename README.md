@@ -31,4 +31,3 @@ To use this role you need to build your own playbook like this:
       - bokeh
 </pre>
 
-This file is licensed under the terms of GPLv3+
